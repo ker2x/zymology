@@ -7,7 +7,7 @@ STEP 1
 ------
 
 * x86-64 only, use Long Mode
-* use Pure64 bootloader from returninfinity, probably
+* use Pure64 bootloader from returninfinity, because i have better things to do when writing a 64 bit OS
 * use nasm, because.
 * use QEMU, because.
 * use newlib, eventually
@@ -18,3 +18,8 @@ STEP 1
 # TODO
 
 everyting
+
+
+# Footnote
+
+42
