@@ -15,11 +15,11 @@ STEP 1
 * read OSDev
 
 
-# TODO
+## TODO
 
-everyting
+everything
 
 
-# Footnote
+### Footnote
 
 42
