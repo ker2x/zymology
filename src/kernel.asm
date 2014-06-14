@@ -1,0 +1,5 @@
+USE64
+ORG 0x0000000000100000
+
+hang:
+	jmp hang
