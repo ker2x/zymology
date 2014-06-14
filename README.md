@@ -13,6 +13,7 @@ STEP 1
 * use newlib, eventually
 * learn from BareMetal-OS
 * read OSDev
+* Use System V ABI
 
 
 ## TODO
