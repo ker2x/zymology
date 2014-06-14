@@ -5,6 +5,7 @@
 ; INIT SMP AP
 ; =============================================================================
 
+; executed in early stage of Pure64, we're still in 16bit real mode
 
 USE16
 
@@ -14,6 +15,7 @@ init_smp_ap:
 clearcs_ap:
 
 ; Enable the A20 gate
+; http://wiki.osdev.org/A20_Line
 set_A20_ap:
 	in al, 0x64
 	test al, 0x02

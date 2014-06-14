@@ -1,6 +1,7 @@
 ; =============================================================================
 ; Pure64 MBR -- a 64-bit OS loader written in Assembly for x86-64 systems
 ; Copyright (C) 2008-2014 Return Infinity -- see LICENSE.TXT
+; Copyright (C) 2014 Laurent "ker2x" Laborde
 ;
 ; This Master Boot Record will load Pure64 from a pre-defined location on the
 ; hard drive without making use of the file system.
@@ -10,42 +11,55 @@
 ; ckeck is made to make sure Pure64 was loaded by comparing a signiture.
 ; =============================================================================
 
+; After POST, the bootstrap sequence in the BIOS will load the first valid MBR 
+; that it finds into the computer's physical memory at address 0x7C00.
+;
+; This is the very first piece of (non-firmware) code executed on the system
+;
+; The CPU start in 16bits real mode (usually, we should check but since it's
+; primarly expected to run on a VM/Emulator, we assume it is)
+
+; For practical purpose the generated .sys should be exactly 512 byte long
+; See padding at the end of this file
+
+
 USE16
 org 0x7C00
 
 entry:
 	cli				; Disable interrupts
 ;	xchg bx, bx			; Bochs magic debug
-	xor ax, ax
+	xor ax, ax			; clear registers
 	mov ss, ax
 	mov es, ax
 	mov ds, ax
-	mov sp, 0x7C00
+	mov sp, 0x7C00			; move the stack pointer below 0x7C00
 	sti				; Enable interrupts
 
 	mov [DriveNumber], dl		; BIOS passes drive number in DL
 
-	mov si, msg_Load
+	mov si, msg_Load		; Print welcome message
 	call print_string_16
 
 	mov eax, 64			; Number of sectors to load. 64 sectors = 32768 bytes
 	mov ebx, 16			; Start immediately after directory (offset 8192)
 	mov cx, 0x8000			; Pure64 expects to be loaded at 0x8000
+					; es:cx is the destination buffer for the disk read
 
 load_nextsector:
-	call readsector			; Load 512 bytes
+	call readsector			; Copy 32KB from disk to 0x8000
 	dec eax
 	cmp eax, 0
-	jnz load_nextsector
+	jnz load_nextsector		; loop until 64 is decremented to 0
 
 	mov eax, [0x8000]
 	cmp eax, 0xC03166FA		; Match against the Pure64 binary
-	jne magic_fail
+	jne magic_fail			; if not pure64, print error and halt
 
-	mov si, msg_LoadDone
+	mov si, msg_LoadDone		; found Pure64, printong a happy message
 	call print_string_16
 
-	jmp 0x0000:0x8000
+	jmp 0x0000:0x8000		; jumping to 0x8000 -> execute Pure64
 
 magic_fail:
 	mov si, msg_MagicFail
@@ -85,6 +99,7 @@ read_it:
 	mov dl, [DriveNumber]
 	mov ah, 42h			; EXTENDED READ
 	int 0x13			; http://hdebruijn.soo.dto.tudelft.nl/newpage/interupt/out-0700.htm#0651
+					; http://wiki.osdev.org/ATA_in_x86_RealMode_(BIOS)
 
 	mov sp, di			; remove parameter block from stack
 	pop ebx
@@ -142,10 +157,11 @@ msg_LoadDone db " - done.", 13, 10, "Executing...", 0
 msg_MagicFail db " - Not found!", 0
 DriveNumber db 0x00
 
-times 446-$+$$ db 0
 
 ; False partition table entry required by some BIOS vendors.
-db 0x80, 0x00, 0x01, 0x00, 0xEB, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF
+; but we don't need it in bochs so i leave it disabled for now
+;times 446-$+$$ db 0
+;db 0x80, 0x00, 0x01, 0x00, 0xEB, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF
 
 times 510-$+$$ db 0
 

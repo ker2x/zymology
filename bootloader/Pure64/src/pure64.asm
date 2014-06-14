@@ -16,12 +16,14 @@
 ; Max size of the resulting pure64.sys is 32768 bytes (32KiB)
 ; =============================================================================
 
+; Entry point, loaded by the MBR code
+; We're still in 16bit real mode
 
 USE16
 ORG 0x00008000
 start:
 	cli				; Disable all interrupts
-	xor eax, eax
+	xor eax, eax			; Clear registers
 	xor ebx, ebx
 	xor ecx, ecx
 	xor edx, edx
@@ -34,6 +36,7 @@ start:
 	mov fs, ax
 	mov gs, ax
 	mov esp, 0x8000			; Set a known free location for the stack
+					; (the stack will grow below 0x8000)
 
 ap_modify:
 	jmp start16			; This command will be overwritten with 'NOP's before the AP's are started
