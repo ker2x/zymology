@@ -2,3 +2,6 @@ bin/
 crosscompiler/
 bmfs.image
 *.sys
+none
+fat32.dmg
+
