@@ -16,6 +16,7 @@ ORG 0x0600
 relocate:
 	; First stuff we need to do is relocate the mbr at 0600
 	; use MOVSW to copy DS:SI to ES:DI
+	xchg bx, bx
 	xor ax, ax
 	mov es, ax
 	mov ds, ax
@@ -42,6 +43,5 @@ relocated:
 DriveNumber db 0x00
 
 ; MBR padding and signature
-times 510-$+$$ db 0 
-sign dw 0xAA55
-end:
+; times 510-$+$$ db 0 
+; sign dw 0xAA55

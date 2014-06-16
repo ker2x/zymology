@@ -45,3 +45,4 @@ com2: enabled=0
 com3: enabled=0
 com4: enabled=0
 #ne2k: ioaddr=0x300, irq=9, mac=b0:c4:20:00:00:00, ethmod=fbsd #, ethdev="/tmp/bochsnet"
+magic_break: enabled=1
