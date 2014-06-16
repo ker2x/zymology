@@ -7,18 +7,20 @@ STEP 1
 ------
 
 * x86-64 only, use Long Mode
-* use Pure64 bootloader from returninfinity, because i have better things to do when writing a 64 bit OS
+* ~~use Pure64 bootloader from returninfinity, because i have better things to do when writing a 64 bit OS~~
+* Or not... code and use Oak64 bootloader, because i can.
 * use nasm, because.
-* use QEMU, because.
-* use newlib, eventually
+* ~~use QEMU, because.~~ Nope, Bochs is better :)
+* use newlib, ~~eventually~~
 * learn from BareMetal-OS
-* read OSDev
+* read OSDev & OSdever
 * Use System V ABI
 
 
 ## TODO
 
-everything
+*  everything
+
 
 
 ### Footnote
