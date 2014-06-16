@@ -15,6 +15,7 @@ STEP 1
 * learn from BareMetal-OS
 * read OSDev & OSdever
 * Use System V ABI
+* Use ~~BMFS~~, ~~Ext2~~, ~~Fat32~~, BMFS ... FS Stuff is a nightmare
 
 
 ## TODO
