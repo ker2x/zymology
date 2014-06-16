@@ -10,13 +10,15 @@
 ; ============================================
 
 
+; MBR is loaded at 0x7C00 but we use 0x0600 because it will be the address after relocation
+
 USE16
 ORG 0x0600
 
 relocate:
 	; First stuff we need to do is relocate the mbr at 0600
 	; use MOVSW to copy DS:SI to ES:DI
-	xchg bx, bx
+	xchg bx, bx	; Bochs magic debug
 	xor ax, ax
 	mov es, ax
 	mov ds, ax
@@ -27,21 +29,28 @@ relocate:
 	jmp 0x0000:relocated
 
 relocated:
-	;cli		; Disable interrupts
-	;xchg bx, bx	; Bochs magic debug
-	;xor ax, ax	; clear registers
-	;mov ss, ax
-	;mov es, ax
-	;mov ds, ax
-	;mov sp, 0x7C00	; move the stack pointer below 0x7C00
-	;sti		; Enable interrupts
+	cli		; Disable interrupts
+	xor ax, ax	; clear registers
+	mov ss, ax
+	mov es, ax
+	mov ds, ax
+	mov sp, 0x0600	; move the stack pointer below 0x0600
+	sti		; Enable interrupts
 	mov [DriveNumber], dl
-	jmp relocated
+	push sp
+	xchg bx, bx
+	
+
+; TODO
+; 
+
+hang:
+	jmp hang
 
 
 ; DATA
 DriveNumber db 0x00
 
 ; MBR padding and signature
-; times 510-$+$$ db 0 
-; sign dw 0xAA55
+times 510-$+$$ db 0 
+sign dw 0xAA55
