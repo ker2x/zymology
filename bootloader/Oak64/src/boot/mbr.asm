@@ -15,6 +15,8 @@
 ;
 ; 0000:0500 -> 0007:7BFF (almost 30KiB)
 ; 0000:7E00 -> 007F:FFFF (480.5KiB)
+; 0010:0000 -> 00EF:FFFF (14MiB)
+; 0100:0000 -> ????:???? (whatever exist)
 
 ; List of usefull memory (partially useable)
 ; ------------------------------------------
@@ -25,6 +27,23 @@
 ; 0008:0000 -> 0009:FBFF : May be used by EDBA (depending of EDBA size)
 ; 0009:FC00 -> 0009:FFFF : EBDA
 ; 000A:0000 -> 000F:FFFF : VRAM, ROM, ... unuseable
+; 00F0:0000 -> 00FF:FFFF : Isa memory hole
+; C000:0000 -> FFFF:FFFF : Various (PCI device, PnP, APIC, BIOS,...)
+
+
+; Planning
+; --------
+;
+; 0000:0000 -> 0000:04FF : IVT + BDA (1280 bytes)
+; 0000:0500 -> 0000:05FF : *FREE* (256 bytes)
+; 0000:0600 -> 0000:07FF : relocated MBR (512 bytes)
+; 0000:0800 -> 0000:7BFF : *FREE*
+; 0000:7C00 -> 0000:7DFF : original MBR
+; 0000:7E00 -> 0000:7FFF : 8000 and below : stack
+; 0000:8000 -> 0000:FFFF : Bootloader (32768 bytes)
+; 0001:0000 -> 00EF:FFFF : Kernel (14MiB of free memory)
+
+
 
 ; We're in 16bit Real Mode
 USE16
