@@ -1,5 +1,5 @@
-zymology
-========
+ZYMOLOGY 64 BIT OPERATING SYSTEM
+================================
 
 Studying fermentation of a 64 bits operating system
 
@@ -10,11 +10,12 @@ STEP 1
 * ~~use Pure64 bootloader from returninfinity, because i have better things to do when writing a 64 bit OS~~
 * Or not... code and use Oak64 bootloader, because i can.
 * use nasm, because.
-* ~~use QEMU, because.~~ Nope, Bochs is better :)
-* use newlib, ~~eventually~~
+* ~~use QEMU, because.~~ ~~Nope, Bochs is better :)~~ Use both.
+* use newlib, ~~eventually~~ in a far future
 * learn from BareMetal-OS
 * read OSDev & OSdever
-* Use System V ABI
+* Use System V ABI (X86-64)
+* LP64 Model
 * Use ~~BMFS~~, ~~Ext2~~, ~~Fat32~~, BMFS ... FS Stuff is a nightmare
 
 
