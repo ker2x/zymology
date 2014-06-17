@@ -1,5 +1,5 @@
-ZYMOLOGY 64 BIT OPERATING SYSTEM
-================================
+ZYMOLOGY
+========
 
 Studying fermentation of a 64 bits operating system
 
