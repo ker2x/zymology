@@ -38,7 +38,7 @@
 ; 0000:0500 -> 0000:05FF : *FREE* (256 bytes)
 ; 0000:0600 -> 0000:07FF : relocated MBR (512 bytes)
 ; 0000:0800 -> 0000:7BFF : *FREE*
-; 0000:7C00 -> 0000:7DFF : original MBR
+; 0000:7C00 -> 0000:7DFF : original MBR (512 bytes)
 ; 0000:7E00 -> 0000:7FFF : 8000 and below : stack
 ; 0000:8000 -> 0000:FFFF : Bootloader (32768 bytes)
 ; 0001:0000 -> 00EF:FFFF : Kernel (14MiB of free memory)
@@ -149,6 +149,11 @@ relocated:
 ;   - The kernel must immediatly follow the bootloader
 
 ; Load the first stage of the bootloader from disk (0x2000)
+
+; From Pure64 MBR
+	mov eax, 64	; Load 64 sector (32KiB)
+	mov ebx, 16	; Start at 16th sector
+	mov cx, 0x8000	; Load the bootloader at 0x8000
 
 
 hang:
