@@ -35,7 +35,8 @@
 ; --------
 ;
 ; 0000:0000 -> 0000:04FF : IVT + BDA (1280 bytes)
-; 0000:0500 -> 0000:05FF : *FREE* (256 bytes)
+; 0000:0500 -> 0000:050F : DAP to read the disk (16 byte)
+; 0000:0510 -> 0000:05FF : *FREE* (256 bytes)
 ; 0000:0600 -> 0000:07FF : relocated MBR (512 bytes)
 ; 0000:0800 -> 0000:7BFF : *FREE*
 ; 0000:7C00 -> 0000:7DFF : original MBR (512 bytes)
@@ -72,7 +73,7 @@ relocated:
 	mov ss, ax
 	mov es, ax
 	mov ds, ax
-	mov sp, 0x8000	; move the stack pointer below 0x0600
+	mov sp, 0x8000	; set the stack pointer to 0x8000, first element will be at 0x7FFE
 	sti		; Enable interrupts
 
 	mov [DriveNumber], dl	; Since the data area is relative to ORG 0x0600 we couldn't do that before
@@ -155,14 +156,44 @@ relocated:
 	mov ebx, 16	; Start at 16th sector
 	mov cx, 0x8000	; Load the bootloader at 0x8000
 
+; Store the 16 byte of the DAP to 0x0500
+; DAP structure below (thx wikipedia)
+; ------------------------------------
+; 0x0500		1 byte		Size of DAP = 16 = 0x10
+; 0x0501		1 byte		Always 0 
+; 0x0502->0x0503	2 bytes		Number of sector to read
+; 0x0504->0x0507	4 bytes		Segment:Offset pointer to the memory buffer to which sectors will be transfered (for us that will be 0000:8000)
+; 0x0508->0x050F	8 bytes		Absolute number (2*32bit) of the start of the sector to be read (1st sector have number 0)
+
+	;mov  byte [0x0500], 16
+	;mov  byte [0x0501], 0
+	;mov  word [0x0502], 16
+	;mov  dword [0x0504], 0x000008000
+	;mov  dword [0x050C], 16
+	;mov  dword [0x0508], 0x000000000
+
+	mov ah, 0x42
+	mov dl, [DriveNumber]
+	mov si, [Dap]
+	int 0x13
+
+	xchg bx, bx	; Bochs magic debug
 
 hang:
+	hlt
 	hlt
 	jmp hang
 
 
+
 ; DATA
-DriveNumber db 0x00
+DriveNumber 	db 0x00
+Dap		db 16
+		db 0
+		dw 16
+		dd 0x00008000
+		dd 0x00000000
+		dd 0x0000000F
 
 ; MBR padding and signature
 times 510-$+$$ db 0 
