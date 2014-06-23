@@ -2,7 +2,7 @@
 
 rm bmfs.image
 
-./bin/bmfs bmfs.image initialize 10M bootloader/Oak64/bin/mbr.sys
+./bin/bmfs bmfs.image initialize 10M bootloader/Oak64/bin/mbr.sys bootloader/Oak64/bin/mbr.sys
 
 
 #echo "another placeholder"
