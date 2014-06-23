@@ -67,6 +67,14 @@ relocate:
 ; We copied the MBR from 0x7C00 to 0x0600 and jumped to "relocated" relative to 0x0600
 ; (So we jumped at 0x0600 + the size of the code above)
 relocated:
+
+	; 80x25 video mode (will clear screen)
+	mov ax, 0x003
+	int 0x10
+
+	mov si, msg_hello
+	call print
+
 	cli		; Disable interrupts
 	xor ax, ax	; clear registers
 	mov ss, ax
@@ -85,9 +93,6 @@ relocated:
 	mov ax, 0x2401
 	int 0x15
 
-	; 80x25 video mode
-	mov ax, 0x003
-	int 0x10
 
 	; Disable blinking
 	;mov ax, 0x1003
@@ -95,6 +100,8 @@ relocated:
 	;int 0x10
 	
 
+	mov si, msg_done
+	call print
 
 	;xchg bx, bx	; Bochs magic debug
 
@@ -149,6 +156,8 @@ relocated:
 ;   - The kernel must immediatly follow the bootloader
 
 
+	mov si, msg_readdisk
+	call print
 
 	; Load the first stage of the bootloader from disk (0x2000)
 	mov ah, 0x42
@@ -156,18 +165,43 @@ relocated:
 	mov si, Dap
 	int 0x13
 
-	;xchg bx, bx	; Bochs magic debug
+	mov si, msg_done
+	call print
+
 
 	; WOOT WOOT
 	; Job done, jump to bootloader code :)
+	mov si, msg_jumpboot
+	call print
 	jmp 0x8000
 
 
+; Functions
+print:
+	pusha
+	mov ah, 0x0E
+.repeat:
+	lodsb
+	cmp al, 0
+	je .done
+	int 0x10
+	jmp short .repeat
+.done
+	popa
+	ret
+
 
 ; DATA
-DriveNumber 	db 0x00
+; ----
 
-;times 400-$+$$  db 0 
+; STRING
+msg_hello	db	"Friendly greetings from Oak64 MBR :)", 0x0D, 0x0A, "------------------------------------", 0x0D, 0x0A, 0x0D, 0x0A, "1) Loading ... ", 0
+msg_readdisk	db	"2) Reading bootloader data ... ", 0
+msg_jumpboot	db	"3) Executing Oak64 bootloader ... ", 0x0D, 0x0A, 0x0D, 0x0A, 0
+msg_done	db	"Done !", 0x0D, 0x0A, 0
+
+; Placeholder for drive number
+DriveNumber 	db 0x00
 
 ; DAP DATA
 ; DAP structure below (thx wikipedia)
