@@ -197,7 +197,7 @@ print:
 ; STRING
 msg_hello	db	"Friendly greetings from Oak64 MBR :)", 0x0D, 0x0A, "------------------------------------", 0x0D, 0x0A, 0x0D, 0x0A, "1) Loading ... ", 0
 msg_readdisk	db	"2) Reading bootloader data ... ", 0
-msg_jumpboot	db	"3) Executing Oak64 bootloader ... ", 0x0D, 0x0A, 0x0D, 0x0A, 0
+msg_jumpboot	db	"3) MBR job is done, jumping to Bootloader code ... sayonara _o/", 0x0D, 0x0A, 0x0D, 0x0A, 0
 msg_done	db	"Done !", 0x0D, 0x0A, 0
 
 ; Placeholder for drive number
