@@ -152,9 +152,9 @@ relocated:
 ; Load the first stage of the bootloader from disk (0x2000)
 
 ; From Pure64 MBR
-	mov eax, 64	; Load 64 sector (32KiB)
-	mov ebx, 16	; Start at 16th sector
-	mov cx, 0x8000	; Load the bootloader at 0x8000
+	;mov eax, 64	; Load 64 sector (32KiB)
+	;mov ebx, 16	; Start at 16th sector
+	;mov cx, 0x8000	; Load the bootloader at 0x8000
 
 ; Store the 16 byte of the DAP to 0x0500
 ; DAP structure below (thx wikipedia)
@@ -174,26 +174,29 @@ relocated:
 
 	mov ah, 0x42
 	mov dl, [DriveNumber]
-	mov si, [Dap]
+	mov si, Dap
 	int 0x13
 
 	xchg bx, bx	; Bochs magic debug
 
-hang:
-	hlt
-	hlt
-	jmp hang
+	; WOOT WOOT
+	; Job done, jump to bootloader code :)
+	jmp 0x8000
 
 
 
 ; DATA
 DriveNumber 	db 0x00
-Dap		db 16
+
+times 400-$+$$  db 0 
+
+; DAP DATA
+Dap:		db 0x10
 		db 0
 		dw 16
-		dd 0x00008000
-		dd 0x00000000
-		dd 0x0000000F
+		dw 0x8000
+		dw 0x0000
+		dd 16
 
 ; MBR padding and signature
 times 510-$+$$ db 0 
