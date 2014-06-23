@@ -96,7 +96,7 @@ relocated:
 	
 
 
-	xchg bx, bx	; Bochs magic debug
+	;xchg bx, bx	; Bochs magic debug
 
 
 ; BMFS Disk layout
@@ -156,7 +156,7 @@ relocated:
 	mov si, Dap
 	int 0x13
 
-	xchg bx, bx	; Bochs magic debug
+	;xchg bx, bx	; Bochs magic debug
 
 	; WOOT WOOT
 	; Job done, jump to bootloader code :)
@@ -167,7 +167,7 @@ relocated:
 ; DATA
 DriveNumber 	db 0x00
 
-times 400-$+$$  db 0 
+;times 400-$+$$  db 0 
 
 ; DAP DATA
 ; DAP structure below (thx wikipedia)

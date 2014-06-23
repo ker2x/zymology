@@ -4,5 +4,5 @@ USE16
 ORG 0X8000
 
 hang:
-	hlt
+	xchg bx, bx
 	jmp hang
