@@ -3,6 +3,8 @@ ZYMOLOGY
 
 Studying fermentation of a 64 bits operating system
 
+![First screenshot ever](/first_screenshot_ever.jpg)
+
 STEP 1
 ------
 
