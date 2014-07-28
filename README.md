@@ -1,3 +1,5 @@
+This repo moved to [network42](https://github.com/network42/zymology) organization github account.
+
 ZYMOLOGY
 ========
 
